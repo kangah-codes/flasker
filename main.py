@@ -25,16 +25,38 @@ def main(template, static, add):
 				cprint(f"Creating project in {os.getcwd()}...", 'green')
 				time.sleep(1)
 				try:
-					os.mkdir(os.getcwd()+'/'+name)
-					os.mkdir(os.getcwd()+'/'+name+'/'+'static')
-					os.mkdir(os.getcwd()+'/'+name+'/'+'templates')
-					os.mkdir(os.getcwd()+'/'+name+'/'+'project')
+					os.mkdir(f"{os.getcwd()}/{name}")
+					os.mkdir(f"{os.getcwd()}/{name}/static")
+					os.mkdir(f"{os.getcwd()}/{name}/templates")
+					#os.mkdir(f"{os.getcwd()}/{name}/project")
+					with open(f"{os.getcwd()}/{name}/app.py", 'w') as app:
+						app.write("""from flask import Flask\napp = Flask(__name__)\n\n@app.route('/')\ndef index():\n\treturn "Hello World"\n\nif __name__ == '__main__':\n\tapp.run(debug=True)""")
+						app.close()
+				except OSError as e:
+					cprint(f"Creation of folder failed\nError {e}", "red")
+				except Exception as e:
+					cprint(f"Error {e}", 'red')
+				else:
+					cprint("Created project successfully", "green")
+			else:
+				dir_input = input("Enter absolute path to directory: ")
+				if os.path.isdir(dir_input):
+					cprint(f"Creating project in {dir_input}...", 'green')
+				time.sleep(1)
+				try:
+					os.mkdir(dir_input+'/'+name)
+					os.mkdir(dir_input+'/'+name+'/'+'static')
+					os.mkdir(dir_input+'/'+name+'/'+'templates')
+
+					with open(f"{dir_input}/name/app.py", 'w') as app:
+						app.write("""from flask import Flask\napp = Flask(__name__)\n\n@app.route('/')\ndef index():\n\treturn "Hello World"\n\nif __name__ == '__main__':\n\tapp.run(debug=True)""")
+						app.close()
+						
 				except OSError as e:
 					cprint(f"Creation of folder failed\nError {e}", "red")
 				else:
 					cprint("Created project successfully", "green")
-			else:
-				dir = input("Enter absolute path to directory: ")
+
 				
 
 if __name__ == '__main__':
