@@ -85,7 +85,7 @@ def main(test, add, config, mkenv):
 	else:
 		project_name = input("Enter a project name: ")
 		directory = input("Enter absolute path to directory: ")
-		cprint(f"Creating a project in {os.getcwd()}...", "green")
+		cprint(f"Creating a project in {directory}...", "green")
 		time.sleep(1)
 		try:
 			os.mkdir(f"{directory}/{project_name}")
