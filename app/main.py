@@ -40,22 +40,18 @@ def main(test, add, config, mkenv):
 		os.mkdir(f"{curr_dir}/{project_name}/app/templates")
 		with open(f"{curr_dir}/{project_name}/app/{project_name}/models.py", 'w') as models:
 			models.write("""# your models go here""")
-			models.close()
 		with open(f"{curr_dir}/{project_name}/app/{project_name}/controllers.py", 'w') as controllers:
 			controllers.write(f"""# your app controllers\nfrom flask import Blueprint, request, render_template, flash, g, session, redirect, url_for\nfrom flask_login import LoginManager, current_user, login_user, logout_user, login_required\nfrom app.module.models import *\n\ncontroller = Blueprint('{project_name}', __name__)\n\n@controller.route('/')\ndef index():\n\treturn "HELLO""""")
-			controllers.close()
 		with open(f"{curr_dir}/{project_name}/app/{project_name}/__init__.py", 'w') as init:
-			init.close()
+			# do nothing
+			pass
 		if test:
 			with open(f"{curr_dir}/{project_name}/app/test/test_config.py", "w") as write:
 				write.write("# your testing configs")
-				write.close()
 		with open(f"{curr_dir}/{project_name}/main.py", 'w') as main_file:
 			main_file.write("""from app import app\nif __name__ == "__main__":\n\tapp.run()""")
-			main_file.close()
 		with open(f"{curr_dir}/{project_name}/requirements.txt", 'w') as requirements:
 			requirements.write("""Flask==1.1.1\nFlask-Bcrypt==0.7.1\nFlask-Login==0.5.0\nFlask-Migrate==2.5.2\nflask-restplus==0.13.0\nFlask-Script==2.0.6\nFlask-Session==0.3.1\nFlask-SQLAlchemy==2.4.1\nFlask-Testing==0.7.1""")
-			requirements.close()
 
 	except OSError as e:
 		# catching folder creation error
@@ -74,7 +70,6 @@ def main(test, add, config, mkenv):
 		try:
 			with open(f"{curr_dir}/{project_name}/config.py", 'w') as config:
 				config.write("# your configs go here")
-				config.close()
 		except OSError as e:
 			cprint(f"Creation of config failed\nError: {e}", "red")
 			sys.exit()
