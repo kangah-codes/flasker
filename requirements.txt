@@ -1,4 +1,6 @@
-click
-colorama
-pyfiglet
-termcolor
+click==7.1.2
+colorama==0.4.3
+pyfiglet==0.8.post1
+pytest==5.4.3
+six==1.15.0
+termcolor==1.1.0
