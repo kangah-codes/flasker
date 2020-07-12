@@ -11,20 +11,18 @@ from pyfiglet import figlet_format
 
 # main code
 @click.command()
-@click.option('--test', default=False, help="Create a test dir for your project") # option for test
-@click.option('--add',  default=False, help='Write basic programs') # option to write code to programs
-@click.option('--config',  default=False, help='Create a config file') # option to create a config file
-@click.option('--mkenv', default=False, help='Create a virtual env for the project') # option to create a virtual env
-def main(test, add, config, mkenv):
+@click.option('--test/--no-test', default=False, help="Create a test dir for your project") # option for test
+@click.option('--config/--no-config',  default=False, help='Create a config file') # option to create a config file
+@click.option('--mkenv/--no-env', default=False, prompt="Value: ", help='Create a virtual env for the project') # option to create a virtual env
+def main(test, config, mkenv):
+	print(test, config, mkenv)
 	"""flasker - Simple CLI tool to create flask project structures"""
 	cprint(figlet_format('flasker'), 'green')
 
 	# get user choice for project directory
-	choice = input(f"Create the project in the current directory? : {os.getcwd()} (Y/N)")
+	choice = input(f"Create the project in the current directory? : {os.getcwd()} (Y/N): ")
 	# set dir to current dir if choice is yes else allow user to input their own path
 	curr_dir = os.getcwd() if choice.lower == 'y' else input("Enter full directory path: ")
-	if choice.lower() == 'y' or choice == '':
-		curr_dir = os.getcwd()
 
 	# allow user to enter project name - name which will be given to the folder
 	project_name = input("Enter a project name: ")
@@ -38,6 +36,8 @@ def main(test, add, config, mkenv):
 		os.mkdir(f"{curr_dir}/{project_name}/app/static")
 		os.mkdir(f"{curr_dir}/{project_name}/app/{project_name}")
 		os.mkdir(f"{curr_dir}/{project_name}/app/templates")
+		with open(f"{curr_dir}/{project_name}/app/__init__.py", 'w') as base_init:
+			base_init.write("""# project init""")
 		with open(f"{curr_dir}/{project_name}/app/{project_name}/models.py", 'w') as models:
 			models.write("""# your models go here""")
 		with open(f"{curr_dir}/{project_name}/app/{project_name}/controllers.py", 'w') as controllers:
@@ -50,6 +50,8 @@ def main(test, add, config, mkenv):
 				write.write("# your testing configs")
 		with open(f"{curr_dir}/{project_name}/main.py", 'w') as main_file:
 			main_file.write("""from app import app\nif __name__ == "__main__":\n\tapp.run()""")
+		with open(f"{curr_dir}/{project_name}/main.py", 'w') as manage_py:
+			manage_py.write("""#manage.py file""")
 		with open(f"{curr_dir}/{project_name}/requirements.txt", 'w') as requirements:
 			requirements.write("""Flask==1.1.1\nFlask-Bcrypt==0.7.1\nFlask-Login==0.5.0\nFlask-Migrate==2.5.2\nflask-restplus==0.13.0\nFlask-Script==2.0.6\nFlask-Session==0.3.1\nFlask-SQLAlchemy==2.4.1\nFlask-Testing==0.7.1""")
 
@@ -66,7 +68,8 @@ def main(test, add, config, mkenv):
 
 	if config:
 		# if user chooses config option
-		cprint("Creating config file", 'green')
+		cprint("Creating config file...", 'green')
+		time.sleep(1)
 		try:
 			with open(f"{curr_dir}/{project_name}/config.py", 'w') as config:
 				config.write("# your configs go here")
@@ -81,14 +84,18 @@ def main(test, add, config, mkenv):
 
 	if mkenv:
 		# user chooses env option
+		cprint("Making virtualenv...", 'green')
+		time.sleep(1)
 		try:
 			if sys.version[0] == '3':
-				os.system("python3 -m venv env")
+				os.system(f"python3 -m venv {curr_dir}/{project_name}/env")
 			else:
-				os.system("python2 -m venv env")
+				os.system(f"python2 -m virtualenv {curr_dir}/{project_name}/env")
 		except:
 			cprint("Making virtual environment failed", 'red')
 			sys.exit()
+		else:
+			cprint("Made Python virtual environment successfully", 'green')
 
 if __name__ == '__main__':
 	main()
